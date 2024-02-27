@@ -63,7 +63,8 @@
         }
 
         .generate-btn,
-        .download-btn {
+        .download-btn,
+        .guide-btn {
             margin-top: 20px; /* Added margin for buttons */
             background-color: #ffeb3b; /* Little dark cream yellow color */
             color: #000000; /* Black text color */
@@ -76,7 +77,8 @@
         }
 
         .generate-btn:hover,
-        .download-btn:hover {
+        .download-btn:hover,
+        .guide-btn:hover {
             background-color: #fdd835; /* Darker cream yellow color on hover */
         }
 
@@ -112,6 +114,8 @@
             <div id="qrCode" class="qr-code"></div>
             <!-- Download button -->
             <a href="#" id="downloadLink" class="download-btn btn btn-lg btn-block">Download QR Code</a>
+            <!-- New button for guide video -->
+            <button class="guide-btn btn btn-lg btn-block" onclick="openGuideVideo()">See the guide video</button>
         </div>
     </div>
 
@@ -152,6 +156,11 @@
             document.getElementById('downloadLink').href = qrCodeUrl;
             // Set download link download attribute to trigger automatic download
             document.getElementById('downloadLink').setAttribute('download', 'QR_Code.png');
+        }
+
+        // Function to open guide video
+        function openGuideVideo() {
+            window.open('https://drive.google.com/file/d/1-rpFKz0Wp9pWE5HjmiGn8o_DyjM8pJpv/view?usp=sharing', '_blank');
         }
     </script>
 
