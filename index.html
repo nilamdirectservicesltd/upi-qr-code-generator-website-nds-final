@@ -125,7 +125,7 @@
             var upiId = document.getElementById('upiIdInput').value;
             var bankingName = document.getElementById('bankingNameInput').value.toUpperCase();
             var upiLink = 'upi://pay?pa=' + upiId + '&pn=' + bankingName + '&am=' + amount + '&cu=INR';
-            var qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chs=' + getQRCodeSize() + '&chl=' + encodeURIComponent(upiLink);
+            var qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(upiLink);
             var qrCodeImg = document.createElement('img');
             qrCodeImg.src = qrCodeUrl;
             qrCodeImg.alt = 'QR Code';
@@ -133,10 +133,6 @@
             document.getElementById('qrCode').appendChild(qrCodeImg);
             document.getElementById('downloadLink').href = qrCodeUrl;
             document.getElementById('downloadLink').setAttribute('download', 'QR_Code.png');
-        }
-
-        function getQRCodeSize() {
-            return '200x200'; // Set the size to 200px by 200px
         }
 
         function openGuideVideo() {
