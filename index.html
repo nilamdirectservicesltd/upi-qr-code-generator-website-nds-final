@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI QR Code Generator</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css for smooth animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFE382 0%, #FFC47E 50%, #FFAD84 100%);
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            animation: fadeIn 0.8s ease-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .custom-container {
+            max-width: 550px;
+            margin: 20px auto;
+            padding: 0 20px;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .custom-label {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(4px);
+            text-align: center;
+        }
+        
+        .custom-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .custom-label h1 {
+            font-size: 24px;
+            margin-bottom: 18px;
+            color: #333;
+            animation: fadeIn 0.8s ease-out 0.3s both;
+        }
+
+        .custom-label p {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #555;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            animation: fadeIn 0.8s ease-out 0.5s both;
+            text-align: left;
+        }
+        
+        .form-group input {
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 199, 126, 0.5);
+            padding: 12px;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 247, 138, 0.2);
+            width: 100%;
+        }
+        
+        .form-group input:focus {
+            border-color: #FFAD84;
+            box-shadow: 0 0 0 0.2rem rgba(255, 173, 132, 0.25);
+            outline: none;
+        }
+
+        .form-group label {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #444;
+            display: block;
+        }
+
+        .qr-code {
+            margin: 25px auto;
+            text-align: center;
+            max-width: 220px;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .qr-code img {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+        
+        .qr-code img:hover {
+            transform: scale(1.03);
+        }
+
+        footer {
+            background-color: rgba(255, 247, 138, 0.95);
+            color: #333;
+            padding: 15px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 15px;
+            animation: fadeIn 0.8s ease-out 0.7s both;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .generate-btn,
+        .download-btn,
+        .guide-btn {
+            background-color: #FFF78A;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 220px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .generate-btn:hover,
+        .download-btn:hover,
+        .guide-btn:hover {
+            background-color: #FFE382;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .generate-btn:active,
+        .download-btn:active,
+        .guide-btn:active {
+            transform: translateY(1px);
+        }
+
+        .loader {
+            display: none;
+            width: 45px;
+            height: 45px;
+            margin: 20px auto;
+            border: 4px solid #FFF78A;
+            border-radius: 50%;
+            border-top-color: #FFAD84;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container custom-container">
+        <div class="custom-label">
+            <h1>UPI QR CODE GENERATOR</h1>
+            <p>Create your payment QR code in seconds</p>
+            
+            <div class="form-group">
+                <label for="amountInput">Amount (₹)</label>
+                <input type="text" id="amountInput" placeholder="e.g. 100">
+            </div>
+            
+            <div class="form-group">
+                <label for="upiIdInput">UPI ID</label>
+                <input type="text" id="upiIdInput" placeholder="yourname@upi">
+            </div>
+            
+            <div class="form-group">
+                <label for="bankingNameInput">Bank Name</label>
+                <input type="text" id="bankingNameInput" placeholder="YOUR BANK NAME">
+            </div>
+            
+            <div class="btn-container">
+                <button class="generate-btn" onclick="generateQRCode()">Generate QR Code</button>
+                <div class="loader" id="loader"></div>
+                <div id="qrCode" class="qr-code"></div>
+                <a href="#" id="downloadLink" class="download-btn">Download QR Code</a>
+                <button class="guide-btn" onclick="openGuideVideo()">How to Use Guide</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Made with ❤️ by Nilam Direct Services
+    </footer>
+
+    <script>
+        function generateQRCode() {
+            var amount = document.getElementById('amountInput').value;
+            var upiId = document.getElementById('upiIdInput').value;
+            var bankingName = document.getElementById('bankingNameInput').value.toUpperCase();
+            
+            if (!upiId) {
+                alert('Please enter your UPI ID');
+                return;
+            }
+            
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('qrCode').innerHTML = '';
+            
+            setTimeout(function() {
+                var upiLink = 'upi://pay?pa=' + upiId + '&pn=' + bankingName + '&am=' + amount + '&cu=INR';
+                var qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(upiLink);
+                var qrCodeImg = document.createElement('img');
+                qrCodeImg.src = qrCodeUrl;
+                qrCodeImg.alt = 'QR Code';
+                qrCodeImg.className = 'animate__animated animate__fadeIn';
+                
+                document.getElementById('qrCode').appendChild(qrCodeImg);
+                document.getElementById('downloadLink').href = qrCodeUrl;
+                document.getElementById('downloadLink').setAttribute('download', 'UPI_QR_Code.png');
+                document.getElementById('loader').style.display = 'none';
+                
+                document.getElementById('downloadLink').classList.add('animate__animated', 'animate__pulse');
+            }, 600);
+        }
+
+        function openGuideVideo() {
+            var btn = event.target;
+            btn.classList.add('animate__animated', 'animate__rubberBand');
+            setTimeout(function() {
+                btn.classList.remove('animate__animated', 'animate__rubberBand');
+                window.open('https://drive.google.com/file/d/1-rpFKz0Wp9pWE5HjmiGn8o_DyjM8pJpv/view?usp=sharing', '_blank');
+            }, 400);
+        }
+        
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.classList.add('animate__animated', 'animate__pulse');
+            });
+            input.addEventListener('blur', function() {
+                this.classList.remove('animate__animated', 'animate__pulse');
+            });
+        });
+    </script>
+</body>
+</html>
